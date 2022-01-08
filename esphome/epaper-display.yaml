@@ -1,0 +1,475 @@
+esphome:
+  name: epaper-display
+  platform: ESP8266
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "***********************"
+
+wifi:
+  ssid: "*********"
+  password: "*********"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Epaper-Display Fallback Hotspot"
+    password: "*******"
+
+captive_portal:
+
+font:
+  - file: 'fonts/Roboto-Medium.ttf'
+    id: roboto_med_17
+    size: 17
+
+  - file: 'fonts/Roboto-Regular.ttf'
+    id: roboto_reg_12
+    size: 12
+
+  - file: 'fonts/Roboto-Regular.ttf'
+    id: roboto_reg_15
+    size: 15
+
+  - file: 'fonts/Roboto-Regular.ttf'
+    id: roboto_reg_20
+    size: 20
+    glyphs:
+      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
+       'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+       'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', 'a', 'b', 'c', 'd', 'e',
+       'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+       't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö', 'à', 'è', 'ì', 'ò', 
+       'ù']
+
+  - file: 'fonts/Roboto-Bold.ttf'
+    id: roboto_bold_27
+    size: 27
+    glyphs:
+      ['&', '@', '!', ',', '.', '"', '%', '(', ')', '+', '-', '_', ':', '°', '0',
+       '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
+       'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+       'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
+       'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+       'u', 'v', 'w', 'x', 'y', 'z','å', 'ä', 'ö', '/','º','µ','³']
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: weather_font_80
+    size: 80
+    glyphs: [
+      # Weather
+      "\U000F0590", # mdi-weather-cloudy
+      "\U000F0594", # mdi-weather-night
+      "\U000F0591", # mdi-weather-fog
+      "\U000F0592", # mdi-weather-hail
+      "\U000F0593", # mdi-weather-lightning
+      "\U000F067E", # mdi-weather-lightning-rainy
+      "\U000F0595", # mdi-weather-partly-cloudy
+      "\U000F0596", # mdi-weather-pouring
+      "\U000F0597", # mdi-weather-rainy
+      "\U000F0598", # mdi-weather-snowy
+      "\U000F067F", # mdi-weather-snowy-rainy
+      "\U000F0599", # mdi-weather-sunny
+      "\U000F059B", # mdi-weather-sunset-down
+      "\U000F059C", # mdi-weather-sunset-up
+      "\U000F059D", # mdi-weather-windy
+      "\U000F059E", # mdi-weather-windy-variant
+      ]
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: weather_font_40
+    size: 40
+    glyphs: [
+      # Weather
+      "\U000F0590", # mdi-weather-cloudy
+      "\U000F0594", # mdi-weather-night
+      "\U000F0591", # mdi-weather-fog
+      "\U000F0592", # mdi-weather-hail
+      "\U000F0593", # mdi-weather-lightning
+      "\U000F067E", # mdi-weather-lightning-rainy
+      "\U000F0595", # mdi-weather-partly-cloudy
+      "\U000F0596", # mdi-weather-pouring
+      "\U000F0597", # mdi-weather-rainy
+      "\U000F0598", # mdi-weather-snowy
+      "\U000F067F", # mdi-weather-snowy-rainy
+      "\U000F0599", # mdi-weather-sunny
+      "\U000F059B", # mdi-weather-sunset-down
+      "\U000F059C", # mdi-weather-sunset-up
+      "\U000F059D", # mdi-weather-windy
+      "\U000F059E", # mdi-weather-windy-variant
+      ]
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: weather_font_15
+    size: 15
+    glyphs: [
+      # Wifi
+      "\U000F092F", # mdi-wifi-strength-outline
+      "\U000F091F", # mdi-wifi-strength-1
+      "\U000F0922", # mdi-wifi-strength-2
+      "\U000F0925", # mdi-wifi-strength-3
+      "\U000F0928", # mdi-wifi-strength-4
+      ]
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: weather_font_30
+    size: 30
+    glyphs: [
+      # Sun
+      "\U000F059A", # mdi-weather-sunset
+      # Moon
+      "\U000F0F64", # mdi-moon-new
+      "\U000F0F67", # mdi-moon-waxing-crescent
+      "\U000F0F61", # mdi-moon-first-quarter
+      "\U000F0F68", # mdi-moon-waxing-gibbous
+      "\U000F0F62", # mdi-moon-full
+      "\U000F0F66", # mdi-moon-waning-gibbous
+      "\U000F0F63", # mdi-moon-last-quarter
+      "\U000F0F65", # mdi-moon-waning-crescent
+      # Rooms
+      "\U000F09A0", # mdi-shower
+      "\U000F09A1", # mdi-shower-head
+      "\U000F04B9", # mdi-sofa
+      "\U000F0C99", # mdi-microwave
+      "\U000F0FD1", # mdi-bed-king-outline
+      "\U000F106E", # mdi-bed-single-outline
+      "\U000F0322", # mdi-laptop
+      "\U000F07F4", # mdi-television-classic
+      ]
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    timezone: Europe/Rome
+    on_time:
+      # Every 1 minutes
+      - seconds: 0
+        then:
+          - component.update: epaperdisplay    
+
+sun:
+  latitude: **.****
+  longitude: **.****
+
+sensor:
+  - platform: homeassistant
+    entity_id: sensor.moon
+    id: moon_stato
+    internal: true
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    id: wifisignal
+    update_interval: 60s
+
+text_sensor:
+  - platform: homeassistant
+    id: moon_icon
+    entity_id: sensor.moon
+  - platform: sun
+    type: sunrise
+    id: sunrise_hour
+  - platform: sun
+    type: sunset
+    id: sunset_hour
+  - platform: homeassistant
+    entity_id: sensor.it_weather
+    id: weathertoday
+  - platform: homeassistant
+    entity_id: sensor.weather_fivedays
+    id: fweather
+  - platform: homeassistant
+    entity_id: sensor.temperature_rooms
+    id: roomtemperature
+  - platform: homeassistant
+    entity_id: sensor.particulate_data
+    id: pm_outdoor
+  - platform: homeassistant
+    entity_id: sensor.bticino_f20t60a_power
+    id: consumo_energetico_istantaneo
+  - platform: homeassistant
+    entity_id: sensor.consumo_energia_giornaliero
+    id: consumo_energetico_giornaliero
+
+spi:
+  clk_pin: 14
+  mosi_pin: 13  #DIN
+
+display:
+  - platform: waveshare_epaper
+    id: epaperdisplay
+    cs_pin: 15
+    dc_pin: 12
+    update_interval: 120s
+    busy_pin: 16
+    reset_pin: 4
+    model: 4.20in
+    lambda: |-
+      /* SENSOR VARIABLES */
+      std::string moon_info = id(moon_icon).state;
+      std::string weather_days = id(fweather).state;
+      std::string weather_today = id(weathertoday).state;
+      std::string room_temperature = id(roomtemperature).state;
+      std::string pm_data = id(pm_outdoor).state;
+      std::string sunrise = id(sunrise_hour).state;
+      std::string sunset = id(sunset_hour).state;
+      std::string energy_instant = id(consumo_energetico_istantaneo).state;
+      std::string energy_daily = id(consumo_energetico_giornaliero).state;
+      
+      std::map<std::string, std::string> weather_icon_state {
+          {"cloudy", "\U000F0590"},
+          {"clear-day", "\U000F0599"},
+          {"clear-night", "\U000F0594"},
+          {"fog", "\U000F0591"},
+          {"hail", "\U000F0592"},
+          {"lightning", "\U000F0593"},
+          {"lightning-rainy", "\U000F067E"},
+          {"partlycloudy", "\U000F0595"},
+          {"pouring", "\U000F0596"},
+          {"rainy", "\U000F0597"},
+          {"snowy", "\U000F0598"},
+          {"snowy-rainy", "\U000F067F"},
+          {"sunny", "\U000F0599"},
+          {"sunset-down", "\U000F059B"},
+          {"sunset-up", "\U000F059C"},
+          {"windy", "\U000F059D"},
+          {"windy-variant", "\U000F059E"}
+      };
+
+      std::map<std::string, std::string> moon_state_icon {
+          {"new_moon", "\U000F0F64"},
+          {"waxing_crescent", "\U000F0F67"},
+          {"first_quarter", "\U000F0F61"},
+          {"waxing_gibbous", "\U000F0F68"},
+          {"full_moon", "\U000F0F62"},
+          {"waning_gibbous", "\U000F0F66"},
+          {"last_quarter", "\U000F0F63"},
+          {"waning_crescent", "\U000F0F65"}
+      };
+
+      std::map<std::string, std::string> moon_state_label {
+          {"new_moon", "Luna Nuova"},
+          {"waxing_crescent", "Mezzaluna Cres."},
+          {"first_quarter", "Primo Quarto"},
+          {"waxing_gibbous", "Gibbosa Cres."},
+          {"full_moon", "Luna Piena"},
+          {"waning_gibbous", "Gibbosa Cal."},
+          {"last_quarter", "Ultimo Quarto"},
+          {"waning_crescent", "Falce Luna Cres."}
+      };
+
+      char delimm = ';';
+
+      /* MAIN RECTANGLE */
+      it.rectangle(5, 5, 390, 295);
+      
+      /* CALENDAR RECT */
+      it.filled_rectangle(10, 10, 120, 30);
+      it.rectangle(10, 40, 120, 90);
+      it.filled_rectangle(10, 130, 120, 30);
+      it.rectangle(10, 160, 120, 135);
+      
+      /* DX RECT */ 
+      it.rectangle(135, 10, 255, 265);
+      
+      /* VERTICAL LINES */ 
+      it.line(198, 10, 198, 274);
+      it.line(262, 10, 262, 274);
+
+      /* HORIZONTAL LINES */ 
+      it.line(135, 76, 389, 76);
+      it.line(135, 142, 389, 142);
+      it.line(135, 208, 389, 208);
+      
+      /* WEATHER TODAY */ 
+      std::size_t currentWeatherToday, previousWeatherToday = 0;
+      currentWeatherToday = weather_today.find(delimm);
+      
+      /* Loop for the single room */
+      for (int i=0; i<4; i++){
+        if (i == 0) {
+          // Day of the week
+          it.printf(70, 30, id(roboto_reg_20), COLOR_OFF, TextAlign::BASELINE_CENTER, "%s", weather_today.substr(previousWeatherToday, currentWeatherToday - previousWeatherToday).c_str());
+        } else if (i == 1) {
+          // Weather Icon
+          it.printf(70, 115, id(weather_font_80), TextAlign::BASELINE_CENTER, "%s", weather_icon_state[weather_today.substr(previousWeatherToday, currentWeatherToday - previousWeatherToday).c_str()].c_str());          
+        } else if (i == 2){
+          // Current Temp
+          it.filled_circle(98, 63, 20, COLOR_OFF);
+          it.circle(98, 63, 20);
+          it.printf(98, 63, id(roboto_reg_15), TextAlign::CENTER, "%s", weather_today.substr(previousWeatherToday, currentWeatherToday - previousWeatherToday).c_str());
+        } else if (i == 3){
+          // Mont
+          it.printf(70, 150, id(roboto_reg_20), COLOR_OFF, TextAlign::BASELINE_CENTER, "%s", weather_today.substr(previousWeatherToday, currentWeatherToday - previousWeatherToday).c_str());
+        }
+
+        previousWeatherToday = currentWeatherToday + 1;
+        currentWeatherToday = weather_today.find(delimm, previousWeatherToday);
+      }
+      
+      /* WEATHER FORECAST */ 
+      ESP_LOGD("WEATHER", "%s", weather_days.c_str());
+      std::size_t currentWeather, previousWeather = 0;
+      char delimWeather = '#';
+      currentWeather = weather_days.find(delimWeather);
+      
+      int wx = 17;    // start position x 
+      int wy = 170;   // start position y 
+
+      /* Loop for the single string day */ 
+      for (int i=0; i<3; i++) { 
+  
+        std::string forecastInfo = weather_days.substr(previousWeather, currentWeather - previousWeather).c_str();
+        std::size_t currentInfo, previousInfo = 0;
+        currentInfo = forecastInfo.find(delimm);
+      
+        /* Inner loop to get single information for each day */
+        for (int j=0; j<3; j++) { 
+      
+          if (j == 0) {
+            // Day (Mon/Tue...) 
+            it.printf(wx + 42, wy + 2, id(roboto_med_17), "%s", forecastInfo.substr(previousInfo, currentInfo - previousInfo).c_str());
+          } else if (j == 1) {
+            // Temperature 
+            it.printf(wx + 42, wy + 20, id(roboto_reg_12), "%s", forecastInfo.substr(previousInfo, currentInfo - previousInfo).c_str());
+          } else if (j == 2) {
+            // Weather Icon             
+            it.printf(wx, wy, id(weather_font_40), "%s", weather_icon_state[forecastInfo.substr(previousInfo, currentInfo - previousInfo).c_str()].c_str() );
+          }
+          previousInfo = currentInfo + 1;
+          currentInfo = forecastInfo.find(delimm, previousInfo);
+        }
+        wy += 40; // move down 50 pixels and output next day 
+        previousWeather = currentWeather + 1;
+        currentWeather = weather_days.find(delimWeather, previousWeather);
+      }
+
+      /* TEMPERATURE */ 
+      ESP_LOGD("TEMPERATURE", "%s", room_temperature.c_str());
+
+      std::size_t currentTemperature, previousTemperature = 0;
+      currentTemperature = room_temperature.find(delimm);
+      
+      int ttx = 140;   // start text position x 
+      int tty = 70;    // start text position y 
+      int tix = 140;   // start icon position x 
+      int tiy = 15;    // start icon position y 
+      int toffset = 66;
+
+      /* Loop for the single room */
+      for (int i=0; i<8; i++) { 
+        if (i == 0) {
+          // Bagno Sotto 
+          it.printf(tix, tiy, id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F09A1");
+          it.printf(ttx, tty, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 1) {
+          // Bagno Sopra 
+          it.printf(tix, tiy + toffset, id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F09A0");
+          it.printf(ttx, tty + toffset, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 2) {
+          // Cameretta 
+          it.printf(tix, tiy + (toffset * 2), id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F106E");
+          it.printf(ttx, tty + (toffset * 2), id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 3) {
+          // Cucina 
+          it.printf(tix, tiy + (toffset * 3), id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F0C99");
+          it.printf(ttx, tty + (toffset * 3), id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 4) {
+          // Letto 
+          it.printf(tix + toffset, tiy, id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F0FD1");
+          it.printf(ttx + toffset, tty, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 5) {
+          // Studio 
+          it.printf(tix + toffset, tiy + toffset, id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F0322");
+          it.printf(ttx + toffset, tty + toffset, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 6) {
+          // Salotto 
+          it.printf(tix + toffset, tiy + (toffset * 2), id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F07F4");
+          it.printf(ttx + toffset, tty + (toffset * 2), id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        } else if (i == 7) {
+          // Mansarda 
+          it.printf(tix + toffset, tiy + (toffset * 3), id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F04B9");
+          it.printf(ttx + toffset, tty + (toffset * 3), id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", room_temperature.substr(previousTemperature, currentTemperature - previousTemperature).c_str());
+        }
+
+        previousTemperature = currentTemperature + 1;
+        currentTemperature = room_temperature.find(delimm, previousTemperature);
+      }
+
+      /* SUNRISE SUNSET */
+      ESP_LOGD("SUNRISE", "%s", sunrise.c_str());
+      ESP_LOGD("SUNSET", "%s", sunset.c_str());
+      it.printf(270, 15, id(weather_font_30), TextAlign::TOP_LEFT, "%s", "\U000F059A");
+      if(id(sunrise_hour).has_state() && id(sunset_hour).has_state()) {
+        it.printf(300, 28, id(roboto_reg_12), TextAlign::BASELINE_LEFT, "%s", sunrise.c_str());
+        it.printf(300, 40, id(roboto_reg_12), TextAlign::BASELINE_LEFT, "%s", sunset.c_str());
+      } else {
+        it.printf(300, 28, id(roboto_reg_12), TextAlign::BASELINE_LEFT, "%s", "n.d.");
+        it.printf(300, 40, id(roboto_reg_12), TextAlign::BASELINE_LEFT, "%s", "n.d.");
+      }
+      
+      /* MOON */
+      if(id(moon_stato).has_state()) {
+        ESP_LOGD("MOON", "%s", moon_info.c_str());
+        // Icon 
+        it.printf(270, 45, id(weather_font_30), TextAlign::TOP_LEFT, "%s", moon_state_icon[moon_info.c_str()].c_str());
+
+        // Label 
+        it.printf(300, 65, id(roboto_reg_12), TextAlign::BASELINE_LEFT, "%s", moon_state_label[moon_info.c_str()].c_str());
+      };
+
+      /* PM SENSOR DATA */ 
+      it.printf(270, 102, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", "PM10 Esterno");
+      if(id(pm_outdoor).has_state()) {
+        ESP_LOGD("PM SENSOR", "%s", pm_data.c_str());
+        it.printf(270, 133, id(roboto_bold_27), TextAlign::BASELINE_LEFT, "%s", pm_data.c_str());
+      } else {
+        it.printf(270, 133, id(roboto_bold_27), TextAlign::BASELINE_LEFT, "%s", "n.d.");
+      }
+
+      /* ENERGY MONITOR */ 
+      it.printf(270, 168, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", "Istantaneo");
+      if(id(consumo_energetico_istantaneo).has_state()) {
+        ESP_LOGD("PM SENSOR", "%s", pm_data.c_str());
+        it.printf(270, 199, id(roboto_bold_27), TextAlign::BASELINE_LEFT, "%s", (energy_instant + "W").c_str());
+      }
+
+      it.printf(270, 234, id(roboto_med_17), TextAlign::BASELINE_LEFT, "%s", "Giornaliero");
+      if(id(consumo_energetico_giornaliero).has_state()) {
+        ESP_LOGD("PM SENSOR", "%s", pm_data.c_str());
+        it.printf(270, 265, id(roboto_bold_27), TextAlign::BASELINE_LEFT, "%s", (energy_daily + "kWh").c_str());
+      }
+
+      /* FOOTER */ 
+      it.strftime(355, 295 , id(roboto_reg_15), TextAlign::BASELINE_RIGHT , "Aggiornato il: %d/%m/%Y %H:%M", id(homeassistant_time).now());
+
+      /* WIFI SIGNAL */ 
+      if(id(wifisignal).has_state()) {
+        int wifi_x = 375;
+        int wifi_y = 295;
+        if (id(wifisignal).state >= -50) {
+          // Excellent
+          it.print(wifi_x, wifi_y, id(weather_font_15), TextAlign::BASELINE_CENTER, "\U000F0928");
+          ESP_LOGI("WiFi", "Exellent");
+        } else if (id(wifisignal).state  >= -60) {
+          // Good
+          it.print(wifi_x, wifi_y, id(weather_font_15), TextAlign::BASELINE_CENTER, "\U000F0925");
+          ESP_LOGI("WiFi", "Good");
+        } else if (id(wifisignal).state  >= -75) {
+          // Fair
+          it.print(wifi_x, wifi_y, id(weather_font_15), TextAlign::BASELINE_CENTER, "\U000F0922");
+          ESP_LOGI("WiFi", "Fair");
+        } else if (id(wifisignal).state  >= -100) {
+          // Weak
+          it.print(wifi_x, wifi_y, id(weather_font_15), TextAlign::BASELINE_CENTER, "\U000F091F");
+          ESP_LOGI("WiFi", "Weak");
+        } else {
+          // Unlikely working signal
+          it.print(wifi_x, wifi_y, id(weather_font_15), TextAlign::BASELINE_CENTER, "\U000F092F");
+          ESP_LOGI("WiFi", "Unlikely");
+        }
+      }

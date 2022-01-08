@@ -1,0 +1,43 @@
+#=========================
+#=== Moon Phases
+#=========================
+- platform: moon
+
+- platform: template
+  sensors:
+    #=========================
+    #=== Sensors Info for Display
+    #=========================
+    weather_now:
+      friendly_name: "Weather Now"
+      value_template: >-
+        {{ states.weather.casa.state }};{{ states.weather.casa.attributes.temperature | round(0) }}°C
+    weather_fivedays:
+      friendly_name: "Five day weather"
+      value_template: >-
+        {% set days = {'Mon':'Lun','Tue':'Mar','Wed':'Mer','Thu':'Gio','Fri':'Ven','Sat':'Sab','Sun':'Dom'} %}
+        {% for state in states.weather.casa.attributes.forecast[0:3] -%}
+          {{ days[as_timestamp(state.datetime)| timestamp_custom("%a")] }};{{state.templow}}/{{ state.temperature }}°C;{{ state.condition }}#
+        {%- endfor %}
+    temperature_rooms:
+      friendly_name: "Temperature Rooms"
+      value_template: >-
+        {{ states.sensor.atc_temperature_bagno_sopra.state }}°C;{{ states.sensor.atc_temperature_bagno_sotto.state }}°C;{{ states.sensor.atc_temperature_cameretta.state }}°C;{{ states.sensor.atc_temperature_cucina.state }}°C;{{ states.sensor.atc_temperature_letto.state }}°C;{{ states.sensor.atc_temperature_studio.state }}°C;{{ states.sensor.salotto_temperature.state | float | round(1) }}°C;{{ states.sensor.mansarda_temperature.state | float | round(1) }}°C;
+    particulate_data:
+      friendly_name: "PM Data Sensors"
+      value_template: >-
+        {{ states.sensor.particulate_matter_10_0um_concentration.state }}µg/m³
+    it_days:
+      friendly_name: "Translated Days"
+      value_template: >-
+        {% set daysIt = ["Lunedì", "Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"] %}
+        {{ daysIt[now().weekday()] }}
+    it_months:
+      friendly_name: "Translated Months"
+      value_template: >-
+        {% set monthsIt = ["Gennaio", "Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"] %}
+        {{ monthsIt[now().month - 1] }}
+    it_weather:
+      friendly_name: "Weather + Translated Days"
+      value_template: >-
+        {{ states.sensor.it_days.state }};{{ states.sensor.weather_now.state }};{{ states.sensor.it_months.state }};
