@@ -2,7 +2,7 @@
 
 A Waveshare 4.2" e-ink display for viewing sensors data from Home Assistant. The firmware is based on ESPHome. I take inspiration from <b>MaxMac_STN</b>'s work (https://github.com/maxmacstn/HA-ePaper-Display), especially for the hardware and the 3D-printed case.
 
-![header](https://github.com/sainz/Home-Assistant-e-Ink-Display/blob/main/images/PXL_20220108_093319359.jpg?raw=true)
+![header](https://github.com/sainz/Home-Assistant-e-Ink-Display/blob/master/images/PXL_20220108_093319359.jpg?raw=true)
 
 
 ### Hardware
